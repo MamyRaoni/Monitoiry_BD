@@ -23,6 +23,19 @@ class AuditCompte
     #[ORM\Column]
     private ?int $solde_ancien = null;
 
+    #[ORM\Column]
+    private ?string $numero_compte = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $nom_client = null;
+
+    #[ORM\Column]
+    private ?int $solde_nouveau = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $utilisateur = null;
+
+
     public function getId(): ?int
     {
         return $this->id;
@@ -63,4 +76,53 @@ class AuditCompte
 
         return $this;
     }
+
+    public function getNumeroCompte(): ?string
+    {
+        return $this->numero_compte;
+    }
+
+    public function setNumeroCompte(string $numero_compte): static
+    {
+        $this->numero_compte = $numero_compte;
+
+        return $this;
+    }
+
+    public function getNomClient(): ?string
+    {
+        return $this->nom_client;
+    }
+
+    public function setNomClient(string $nom_client): static
+    {
+        $this->nom_client = $nom_client;
+
+        return $this;
+    }
+
+    public function getSoldeNouveau(): ?int
+    {
+        return $this->solde_nouveau;
+    }
+
+    public function setSoldeNouveau(int $solde_nouveau): static
+    {
+        $this->solde_nouveau = $solde_nouveau;
+
+        return $this;
+    }
+
+    public function getUtilisateur(): ?string
+    {
+        return $this->utilisateur;
+    }
+
+    public function setUtilisateur(string $utilisateur): static
+    {
+        $this->utilisateur = $utilisateur;
+
+        return $this;
+    }
+
 }

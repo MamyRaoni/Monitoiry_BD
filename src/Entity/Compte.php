@@ -3,9 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CompteRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CompteRepository::class)]
 class Compte
@@ -13,39 +12,40 @@ class Compte
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['user'])]
     private ?int $id = null;
 
     #[ORM\Column]
-    private ?int $numero_compte = null;
+    #[Groups(['user'])]
+    private ?string $numero_compte = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['user'])]
     private ?string $nom_client = null;
 
     #[ORM\Column]
+    #[Groups(['user'])]
     private ?int $solde = null;
 
-    /**
-     * @var Collection<int, AuditeCompte>
-     */
-    #[ORM\OneToMany(targetEntity: AuditeCompte::class, mappedBy: 'compte')]
-    private Collection $auditeComptes;
 
-    public function __construct()
-    {
-        $this->auditeComptes = new ArrayCollection();
-    }
+    #[ORM\ManyToOne(inversedBy: 'comptes')]
+    #[Groups(['user'])]
+    private ?User $id_user = null;
+
+  
+
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getNumeroCompte(): ?int
+    public function getNumeroCompte(): ?string
     {
         return $this->numero_compte;
     }
 
-    public function setNumeroCompte(int $numero_compte): static
+    public function setNumeroCompte(string $numero_compte): static
     {
         $this->numero_compte = $numero_compte;
 
@@ -76,33 +76,18 @@ class Compte
         return $this;
     }
 
-    /**
-     * @return Collection<int, AuditeCompte>
-     */
-    public function getAuditeComptes(): Collection
+
+    public function getIdUser(): ?User
     {
-        return $this->auditeComptes;
+        return $this->id_user;
     }
 
-    public function addAuditeCompte(AuditeCompte $auditeCompte): static
+    public function setIdUser(?User $id_user): static
     {
-        if (!$this->auditeComptes->contains($auditeCompte)) {
-            $this->auditeComptes->add($auditeCompte);
-            $auditeCompte->setCompte($this);
-        }
+        $this->id_user = $id_user;
 
         return $this;
     }
 
-    public function removeAuditeCompte(AuditeCompte $auditeCompte): static
-    {
-        if ($this->auditeComptes->removeElement($auditeCompte)) {
-            // set the owning side to null (unless already changed)
-            if ($auditeCompte->getCompte() === $this) {
-                $auditeCompte->setCompte(null);
-            }
-        }
-
-        return $this;
-    }
+  
 }
