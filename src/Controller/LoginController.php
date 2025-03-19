@@ -4,7 +4,9 @@ namespace App\Controller;
 
 use App\Repository\UserRepository;
 use App\Service\JwtTokenService;
+use LoginResponseEvent;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -13,7 +15,7 @@ use Symfony\Component\Routing\Attribute\Route;
 final class LoginController extends AbstractController
 {
     #[Route('/login', name: 'api_login', methods: ['POST'])]
-    public function login(Request $request, UserRepository $userRepository, UserPasswordHasherInterface $passwordHasher, JwtTokenService  $jwtTokenService): JsonResponse
+    public function login(Request $request, UserRepository $userRepository, UserPasswordHasherInterface $passwordHasher, JwtTokenService  $jwtTokenService, EventDispatcherInterface $dispatcher): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
         
@@ -31,6 +33,7 @@ final class LoginController extends AbstractController
             }else{
                 $token = $jwtTokenService->generateToken($user);
                 $Users=$jwtTokenService->decodeToken($token);
+                $dispatcher->dispatch(new LoginResponseEvent($Users));
                 return $this->json([
                     'status' => 'success',
                     'message' => 'User logged in successfully',
