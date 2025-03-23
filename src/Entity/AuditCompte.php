@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\AuditCompteRepository;
+use App\Repository\UserRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -113,16 +114,26 @@ class AuditCompte
         return $this;
     }
 
-    public function getUtilisateur(): ?string
-    {
-        return $this->utilisateur;
-    }
+    // public function getUserName(UserRepository $userRepository): ?string
+    // {
+    //     $user=$userRepository->find($this->utilisateur);
 
+    //     return $user->getUsername();
+        
+    // }
     public function setUtilisateur(string $utilisateur): static
     {
+        
         $this->utilisateur = $utilisateur;
 
         return $this;
+    }
+    public function getUtilisateur(): ?string{
+        // $user=$userRepository->find($this->utilisateur);
+
+        // return $user->getUsername();
+        return $this->utilisateur;
+    
     }
 
 }

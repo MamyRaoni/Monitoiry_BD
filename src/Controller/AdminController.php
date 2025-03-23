@@ -3,16 +3,19 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Repository\AuditCompteRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Serializer\SerializerInterface;
 
 final class AdminController extends AbstractController
 {
-    #[Route('/admin/user/register', name: 'app_user_create', methods:['POST'])]
+    #[Route('/admin/register', name: 'app_user_create', methods:['POST'])]
 
     public function register(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): JsonResponse
     {
@@ -45,5 +48,18 @@ final class AdminController extends AbstractController
                 'message' => 'Registration failed'
             ], JsonResponse::HTTP_NOT_FOUND);
         }
+    }
+    #[route('/admin/getAll', name:'app_compte_get',methods:['GET'])]
+    public function getAll(AuditCompteRepository $auditCompteRepository, SerializerInterface $serializer,UserRepository $userRepository){
+        $Auditcopmtes=$auditCompteRepository->findAll();
+        foreach($Auditcopmtes as $Auditcopmte){
+            $user=$userRepository->find($Auditcopmte->getUtilisateur());
+            //dump($user);
+            $Auditcopmte->setUtilisateur($user->getUsername());
+            
+        }
+        
+        $json=$serializer->serialize($Auditcopmtes, 'json');
+        return new JsonResponse($json, JsonResponse::HTTP_OK);
     }
 }

@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Compte;
-use App\Repository\AuditCompteRepository;
 use App\Repository\CompteRepository;
 use App\Repository\UserRepository;
 use App\Service\JwtTokenService;
