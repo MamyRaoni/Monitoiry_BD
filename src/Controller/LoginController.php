@@ -33,12 +33,13 @@ final class LoginController extends AbstractController
             }else{
                 $token = $jwtTokenService->generateToken($user);
                 $Users=$jwtTokenService->decodeToken($token);
-                $dispatcher->dispatch(new LoginResponseEvent($Users));
+                //$dispatcher->dispatch(new LoginResponseEvent($Users));
                 return $this->json([
                     'status' => 'success',
                     'message' => 'User logged in successfully',
                     'token' => $token,
-                    'EmailUsers'=>$Users->getEmail(),
+                    'UsersName'=>$Users->getUsername(),
+                    'Role'=>$Users->getRoles(),
                 ], status: JsonResponse::HTTP_OK);
             }
 
