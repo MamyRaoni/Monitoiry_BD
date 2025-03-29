@@ -3,5 +3,5 @@ mercure:
         default:
             url: '%env(MERCURE_URL)%'
             public_url: '%env(MERCURE_PUBLIC_URL)%'
-            jwt: "testtoken"
+            jwt: '%env(MERCURE_JWT_KEY)%' 
             #jwt_provider: App\Mercure\JwtProvider
