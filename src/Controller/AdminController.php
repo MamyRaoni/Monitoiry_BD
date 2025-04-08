@@ -52,14 +52,12 @@ final class AdminController extends AbstractController
     #[route('/admin/getAll', name:'app_compte_get',methods:['GET'])]
     public function getAll(AuditCompteRepository $auditCompteRepository, SerializerInterface $serializer,UserRepository $userRepository){
         $Auditcopmtes=$auditCompteRepository->findAll();
-        foreach($Auditcopmtes as $Auditcopmte){
-            $user=$userRepository->find($Auditcopmte->getUtilisateur());
-            //dump($user);
-            $Auditcopmte->setUtilisateur($user->getUsername());
+        // foreach($Auditcopmtes as $Auditcopmte){
+        //     $user=$userRepository->find($Auditcopmte->getUtilisateur());
+        //     //dump($user);
+        //     $Auditcopmte->setUtilisateur($user->getUsername());
             
-        }
-        
-        $json=$serializer->serialize($Auditcopmtes, 'json');
-        return new JsonResponse($json, JsonResponse::HTTP_OK);
+        // }
+        return $this->json($Auditcopmtes);
     }
 }
